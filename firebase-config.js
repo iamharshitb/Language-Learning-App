@@ -5,12 +5,12 @@
    fully working, just not synced across devices. */
 
 window.NERCHUKO_FIREBASE_CONFIG = {
- apiKey: "AIzaSyD7-6GacKnezUgyF-Cr6e8UQtC8n4K-Xig",
-  authDomain: "nerchuko-4bc31.firebaseapp.com",
-  projectId: "nerchuko-4bc31",
-  storageBucket: "nerchuko-4bc31.firebasestorage.app",
-  messagingSenderId: "256427363166",
-  appId: "1:256427363166:web:472c860cdae23d25e7ddcf"
+  apiKey: "PASTE_YOUR_API_KEY_HERE",
+  authDomain: "PASTE_YOUR_AUTH_DOMAIN_HERE",
+  projectId: "PASTE_YOUR_PROJECT_ID_HERE",
+  storageBucket: "PASTE_YOUR_STORAGE_BUCKET_HERE",
+  messagingSenderId: "PASTE_YOUR_SENDER_ID_HERE",
+  appId: "PASTE_YOUR_APP_ID_HERE",
 };
 
 /* A private ID for your data so all your devices sync to the same place —

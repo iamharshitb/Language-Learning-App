@@ -238,6 +238,31 @@ function renderHome() {
   renderStats();
   renderHomeCTA();
   renderResetRow();
+  renderOverview();
+}
+
+function renderOverview() {
+  const glyphs = { te: "తె", kn: "ಕ", de: "De", ja: "日" };
+  const html = LANGUAGE_ORDER.map((code) => {
+    const total = CARDS_BY_LANG[code].length;
+    const langProgress = allProgress.languages[code];
+    const introduced = langProgress ? Object.keys(langProgress.cardStates).length : 0;
+    const mastered = langProgress
+      ? Object.values(langProgress.cardStates).filter((s) => s.box >= 4).length
+      : 0;
+    const pct = total ? Math.round((introduced / total) * 100) : 0;
+    const fillClass = mastered === total && total > 0 ? "mastered" : "";
+    const isActive = code === currentLang;
+    return `
+      <button class="overview-row" data-action="switch-lang-overview" data-lang="${code}" ${isActive ? 'style="background: var(--bg-elev)"' : ""}>
+        <span class="overview-glyph">${glyphs[code]}</span>
+        <span class="overview-mid">
+          <span class="overview-name-row"><b>${LANGUAGES[code].name}</b><span>${introduced}/${total}</span></span>
+          <span class="overview-track"><span class="overview-fill ${fillClass}" style="width:${pct}%"></span></span>
+        </span>
+      </button>`;
+  }).join("");
+  document.getElementById("overview-list").innerHTML = html;
 }
 
 /* ---------- session ---------- */
@@ -421,6 +446,11 @@ function bindStaticEvents() {
     } else if (action === "speak") {
       const card = cardsForLang().find((c) => c.id === el.dataset.cardId);
       if (card) speak(card.te);
+    } else if (action === "switch-lang-overview") {
+      if (el.dataset.lang !== currentLang) {
+        confirmReset = false;
+        switchLanguage(el.dataset.lang);
+      }
     }
   });
 }

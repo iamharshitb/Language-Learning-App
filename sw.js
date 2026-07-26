@@ -1,4 +1,4 @@
-const CACHE_NAME = "nerchuko-v3";
+const CACHE_NAME = "nerchuko-v4";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -12,6 +12,7 @@ const PRECACHE = [
   "./firebase-config.js",
   "./firebase-sync.js",
   "./app.js",
+  "./install-prompt.js",
   "./manifest.json",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
