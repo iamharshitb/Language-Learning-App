@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nerchuko — Learn Languages</title>
+<meta name="description" content="A 4-month spaced-repetition flashcard app for Telugu, Kannada, German, and Japanese.">
+<meta name="theme-color" content="#122224">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ HOME ============ -->
+  <section id="view-home" class="view">
+    <div class="lang-tabs" id="lang-tabs">
+      <button class="lang-tab" data-lang="te"><span class="lang-tab-glyph">తె</span><span class="lang-tab-name">Telugu</span></button>
+      <button class="lang-tab" data-lang="kn"><span class="lang-tab-glyph">ಕ</span><span class="lang-tab-name">Kannada</span></button>
+      <button class="lang-tab" data-lang="de"><span class="lang-tab-glyph">De</span><span class="lang-tab-name">German</span></button>
+      <button class="lang-tab" data-lang="ja"><span class="lang-tab-glyph">日</span><span class="lang-tab-name">Japanese</span></button>
+    </div>
+
+    <div class="hero">
+      <div class="hero-glyph" id="hero-glyph">నేర్చుకో</div>
+      <div class="hero-sub" id="hero-sub">nerchuko — "learn!"</div>
+      <div class="hero-greet" id="home-greeting">Namaskaram, Harshit 👋</div>
+      <div class="hero-day" id="home-day">Day 1 of your 4-month journey</div>
+    </div>
+
+    <div class="panel">
+      <div class="mala" id="mala"></div>
+      <div class="mala-caption" id="mala-caption"></div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-pill">
+        <span id="icon-streak"></span>
+        <span class="value" id="stat-streak">0</span>
+        <span class="label">Streak</span>
+      </div>
+      <div class="stat-pill">
+        <span id="icon-learned"></span>
+        <span class="value" id="stat-learned">0/0</span>
+        <span class="label">Learned</span>
+      </div>
+      <div class="stat-pill">
+        <span id="icon-due"></span>
+        <span class="value" id="stat-due">0</span>
+        <span class="label">Due today</span>
+      </div>
+    </div>
+
+    <div id="home-cta"></div>
+
+    <button class="btn-secondary" id="btn-browse">Browse all <span id="total-cards">0</span> phrases</button>
+
+    <div class="settings-row">
+      <span class="label">New cards / day</span>
+      <div class="stepper">
+        <button id="btn-limit-down">−</button>
+        <span class="count" id="daily-limit">8</span>
+        <button id="btn-limit-up">+</button>
+      </div>
+    </div>
+
+    <div class="reset-row" id="reset-row"></div>
+  </section>
+
+  <!-- ============ SESSION ============ -->
+  <section id="view-session" class="view hidden">
+    <div class="session-top">
+      <button class="back-btn" id="btn-session-back"></button>
+      <div class="session-count" id="session-count">1 / 1</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="theme-label" id="card-theme"></div>
+
+    <div class="flip-scene" id="flip-scene">
+      <div class="flip-card" id="flip-card">
+        <div class="face front">
+          <div class="face-en" id="card-en"></div>
+          <div class="face-hint">Tap to reveal</div>
+        </div>
+        <div class="face back">
+          <div class="face-te" id="card-te"></div>
+          <div class="face-tr" id="card-tr"></div>
+          <button class="speak-btn" id="btn-speak"></button>
+          <div class="face-note" id="card-note"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-ghost" id="btn-show-answer">Show answer</button>
+
+    <div id="grade-controls" class="hidden">
+      <div class="grade-hint">How well did you know this?</div>
+      <div class="grade-row">
+        <button class="grade-btn again" id="btn-again"></button>
+        <button class="grade-btn good" id="btn-good"></button>
+        <button class="grade-btn easy" id="btn-easy"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SUMMARY ============ -->
+  <section id="view-summary" class="view hidden summary-wrap">
+    <div class="summary-inner">
+      <div class="summary-emoji">🎉</div>
+      <div class="summary-title">Session complete</div>
+      <div class="summary-sub" id="summary-count">0 cards reviewed</div>
+      <div class="stats-row" id="summary-stats"></div>
+      <div class="streak-banner" id="streak-banner"></div>
+      <button class="btn-primary" id="btn-summary-home">Back to home</button>
+    </div>
+  </section>
+
+  <!-- ============ BROWSE ============ -->
+  <section id="view-browse" class="view hidden">
+    <div class="browse-top">
+      <button class="back-btn" id="btn-browse-back"></button>
+      <div class="browse-title" id="browse-title">All phrases</div>
+    </div>
+    <div id="browse-list"></div>
+  </section>
+
+</div>
+
+<script src="data-te.js"></script>
+<script src="data-kn.js"></script>
+<script src="data-de.js"></script>
+<script src="data-ja.js"></script>
+<script src="languages.js"></script>
+<script src="storage-adapter.js"></script>
+<script src="firebase-config.js"></script>
+<script type="module" src="firebase-sync.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

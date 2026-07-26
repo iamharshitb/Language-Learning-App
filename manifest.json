@@ -1,0 +1,15 @@
+{
+  "name": "Nerchuko — Learn Languages",
+  "short_name": "Nerchuko",
+  "description": "A 4-month spaced-repetition flashcard app for Telugu, Kannada, German, and Japanese.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#122224",
+  "theme_color": "#122224",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
