@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Nerchuko — Learn Languages</title>
+<script>
+  // Captured as early as physically possible — before any other script runs —
+  // because beforeinstallprompt can fire before later scripts get a chance to
+  // attach their own listener, and a missed event never fires again.
+  window.__nerchukoDeferredPrompt = null;
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    window.__nerchukoDeferredPrompt = e;
+  });
+</script>
 <meta name="description" content="A 4-month spaced-repetition flashcard app for Telugu, Kannada, German, and Japanese.">
 <meta name="theme-color" content="#122224">
 <meta name="mobile-web-app-capable" content="yes">

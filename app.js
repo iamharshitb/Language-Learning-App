@@ -24,17 +24,34 @@ function daysBetween(a, b) {
   return Math.round((new Date(b + "T00:00:00") - new Date(a + "T00:00:00")) / 86400000);
 }
 
-/* ---------- spaced repetition (leitner) ---------- */
-const INTERVALS = [0, 1, 3, 7, 14, 30, 45];
+/* ---------- spaced repetition (Anki-style learning queue + Leitner review ladder) ----------
+   box 0 = new / still being learned this session (never yet passed with Good or Easy)
+   box 1-6 = graduated review ladder, each step a longer real-calendar interval
+
+   Again:  new (box 0) card stays box 0; a graduated (box>=1) card LAPSES back to box 1
+           ("relearning"). Either way dueDate = today, so the session's queue re-shows it
+           before the sitting ends — it does not vanish until tomorrow.
+   Good:   graduates the card to the next box with a real future interval.
+   Easy:   graduates further ahead (skips a box) for cards you clearly already know. */
+const INTERVALS = [0, 1, 2, 4, 9, 20, 45]; // days, indexed by box
 
 function leitnerUpdate(state, outcome) {
-  let box = state?.box ?? 0;
-  if (outcome === "again") box = 1;
-  else if (outcome === "good") box = Math.min(box + 1, INTERVALS.length - 1);
-  else if (outcome === "easy") box = Math.min(box + 2, INTERVALS.length - 1);
+  const box = state?.box ?? 0;
+  let newBox = box;
+  let dueDate;
+  if (outcome === "again") {
+    newBox = box === 0 ? 0 : 1; // still-new cards stay new; graduated cards lapse to box 1
+    dueDate = todayStr(); // due again today — the session queue re-inserts it below
+  } else if (outcome === "good") {
+    newBox = box === 0 ? 1 : Math.min(box + 1, INTERVALS.length - 1);
+    dueDate = addDays(todayStr(), INTERVALS[newBox]);
+  } else if (outcome === "easy") {
+    newBox = box === 0 ? 2 : Math.min(box + 2, INTERVALS.length - 1);
+    dueDate = addDays(todayStr(), INTERVALS[newBox]);
+  }
   return {
-    box,
-    dueDate: addDays(todayStr(), INTERVALS[box]),
+    box: newBox,
+    dueDate,
     correct: (state?.correct ?? 0) + (outcome !== "again" ? 1 : 0),
     wrong: (state?.wrong ?? 0) + (outcome === "again" ? 1 : 0),
     seen: (state?.seen ?? 0) + 1,
@@ -68,17 +85,14 @@ function sessionSize() {
 }
 
 function buildQueue() {
+  // Due/relearning cards are placed ahead of brand-new ones, so today's
+  // backlog (including anything still stuck in an "Again" loop from an
+  // earlier sitting today) clears before fresh vocabulary is introduced.
   const today = todayStr();
   const cards = cardsForLang();
   const due = cards.filter((c) => progress.cardStates[c.id] && progress.cardStates[c.id].dueDate <= today);
   const fresh = cards.filter((c) => !progress.cardStates[c.id]).slice(0, progress.settings.dailyNewLimit);
-  const merged = [];
-  const max = Math.max(due.length, fresh.length);
-  for (let i = 0; i < max; i++) {
-    if (due[i]) merged.push(due[i]);
-    if (fresh[i]) merged.push(fresh[i]);
-  }
-  return merged;
+  return [...due, ...fresh];
 }
 
 function defaultLangProgress() {
@@ -311,6 +325,14 @@ function grade(outcome) {
   progress.totalReviews = (progress.totalReviews || 0) + 1;
   saveAllProgress();
   sessionStats[outcome]++;
+
+  if (outcome === "again") {
+    // Re-insert a few cards ahead (not immediately next) so it resurfaces
+    // before the session ends, instead of only coming back tomorrow.
+    const insertAt = Math.min(queue.length, index + 4);
+    queue.splice(insertAt, 0, card);
+  }
+
   if (index + 1 < queue.length) {
     index++;
     renderSessionCard();
